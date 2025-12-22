@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nijitter | {{.carrotID}}</title>
+</head>
+
+<body>
+    <script>
+        document.addEventListener("DOMContentLoaded", async (e) => {
+            e.preventDefault();
+
+            const res = await fetch("/api/carrot/carrot/{{.carrotID}}", {
+                method: "GET",
+            })
+
+            if (res.status === 401) {
+                window.location.href = "/login"
+            }
+
+            const result = await res.json()
+
+            if (res.ok) {
+                console.log(res.json)
+            }
+        })
+    </script>
+</body>
+
+</html>

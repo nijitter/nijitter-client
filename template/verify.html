@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nijitter | 確認とアカウント作成</title>
+</head>
+
+<body>
+    <style>
+        label {
+            text-align: left;
+        }
+
+        #form {
+            position: relative;
+            top: 200px;
+            text-align: center;
+        }
+    </style>
+    <div id="form">
+        <p id="errorMsg" style="color: red;"></p>
+        <form id="signupForm">
+            <label for="password">パスワード</label>
+            <br>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <label for="userid">ユーザーID</label>
+            <br>
+            <input type="text" id="user_id" name="user_id" required>
+            <br>
+            <label for="username">ユーザーネーム</label>
+            <br>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <button type="submit">送信</button>
+        </form>
+        <script>
+            document.getElementById("signupForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const form = e.target;
+                const data = {
+                    password: form.password.value,
+                    userid: form.user_id.value,
+                    username: form.username.value
+                }
+
+                const res = await fetch("/api/auth/verify", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                })
+
+                if (res.ok) {
+                    window.location.href = "/"
+                }
+
+                const result = await res.json()
+
+                if (result.error == "Invalid request") {
+                    window.location.href = "/error"
+                } else {
+                    document.getElementById("errorMsg").textContent = result.error + result.details;
+                }
+            })
+        </script>
+</body>
+
+</html>

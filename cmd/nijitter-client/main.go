@@ -1,7 +1,6 @@
 package main
 
 import (
-	"nijitter-client/database"
 	"nijitter-client/route"
 
 	"github.com/joho/godotenv"
@@ -9,6 +8,5 @@ import (
 
 func main() {
 	godotenv.Load()
-	database.InitDB()
 	route.Router()
 }

@@ -6,10 +6,12 @@
     <title>Nijitter | タイムライン</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Rampart+One&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Rampart+One&family=Sawarabi+Gothic&display=swap"
+        rel="stylesheet">
 </head>
 
-<body>
+<body data-api-url="{{ .apiUrl }}">
     <style>
         .dotgothic16-regular {
             font-family: "DotGothic16", sans-serif;
@@ -26,62 +28,7 @@
     <div id="post" class="dotgothic16-regular"><a href="/postcarrot">carrotはこちら</a></div>
     <div id="timeline" class="rampart-one-regular"></div>
     <div id="loader" class="dotgothic16-regular">loading...</div>
-    <script>
-        let cursor = null
-        let loading = false
-        let done = false
-
-        async function loadTimeline() {
-            if (loading || done) return
-            loading = true
-
-            let url = "/api/carrot/timeline"
-            if (cursor) {
-                url += "?cursor=" + cursor
-            }
-
-            const res = await fetch(url)
-
-            if (res.status === 401) {
-                window.location.href = "/login"
-            }
-
-            if (!res.ok) {
-                loading = false
-                return
-            }
-
-            const data = await res.json()
-
-            if (data.carrots.length === 0) {
-                done = true
-                document.getElementById("loader").textContent = "end"
-                return
-            }
-
-            for (const post of data.carrots) {
-                const div = document.createElement("div")
-                div.className = "carrot"
-                div.textContent = post.content + " by: " + post.username
-                document.getElementById("timeline").appendChild(div)
-            }
-
-            cursor = data.next_cursor
-            loading = false
-        }
-
-        // IntersectionObserver
-        const observer = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) {
-                loadTimeline()
-            }
-        })
-
-        observer.observe(document.getElementById("loader"))
-
-        // 初回ロード
-        loadTimeline()
-    </script>
+    <script type="module" src="/static/js/timeline.00005.js"></script>
 </body>
 
 </html>

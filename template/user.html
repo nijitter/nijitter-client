@@ -3,36 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Nijitter | {{.userID}}</title>
+    <title>Nijitter | {{ .userID }}</title>
 </head>
 
-<body>
-    <h1 id="username">{{.username}}</h1>
-    <h6 id="user_id">{{.userID}}</h6>
-    {{ if .icon_path }}<img src="{{ .image_url }}{{ .icon_path }}" alt="User Icon">{{ end }}
-    {{ if .bio }}<p id="bio"></p>{{ .bio }}</p>{{ end }}
-    {{ if .status_message }}<p id="status_message">{{ .status_message }}</p>{{ end }}
-    <p id="created_at">{{.created_at}}</p>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", async (e) => {
-            e.preventDefault();
-
-            const res = await fetch("/api/carrot/user/{{.userID}}", {
-                method: "GET",
-            })
-
-            if (res.status === 401) {
-                window.location.href = "/login"
-            }
-
-            const result = await res.json()
-
-            if (res.ok) {
-                console.log(result)
-            }
-        })
-    </script>
+<body data-api-url="{{ .apiUrl }}" data-user-id="{{ .userID }}">
+    <script type="module" src="/static/js/user.00001.js"></script>
 </body>
 
 </html>

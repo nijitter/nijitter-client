@@ -6,7 +6,7 @@
     <title>Nijitter | サインアップ</title>
 </head>
 
-<body>
+<body data-api-url="{{ .apiUrl }}">
     <style>
         #form {
             position: relative;
@@ -23,35 +23,7 @@
             <button type="submit">送信</button>
         </form>
     </div>
-    <script>
-        document.getElementById("emailForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const form = e.target;
-            const data = {
-                email: form.email.value,
-            }
-
-            const res = await fetch("/api/auth/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            })
-
-            if (res.ok) {
-                window.location.href = "/success"
-            }
-
-            const result = await res.json()
-
-            if (result.error == "Invalid request") {
-                window.location.href = "/error"
-            } else {
-                document.getElementById("errorMsg").textContent = result.error;
-            }
-
-        })
-    </script>
+    <script type="module" src="/static/js/signup.00001.js"></script>
 </body>
 
 </html>

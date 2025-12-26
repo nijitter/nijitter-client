@@ -12,22 +12,10 @@ func Router() {
 	route := gin.Default()
 	route.LoadHTMLGlob("template/*")
 	// JS をキャッシュさせない
-	route.GET("/static/*.js", func(c *gin.Context) {
-		c.Header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-		c.Header("Pragma", "no-cache")
-		c.Header("Expires", "0")
-
-		c.File("./static" + c.Param("filepath"))
-	})
+	route.GET("/static/*.js", noCacheStaticFile)
 
 	// CSS をキャッシュさせない
-	route.GET("/static/*.css", func(c *gin.Context) {
-		c.Header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-		c.Header("Pragma", "no-cache")
-		c.Header("Expires", "0")
-
-		c.File("./static" + c.Param("filepath"))
-	})
+	route.GET("/static/*.css", noCacheStaticFile)
 
 	// 画像・フォントなどは通常配信
 	route.Static("/static", "./static")

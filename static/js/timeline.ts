@@ -37,7 +37,6 @@ async function timelineFetch() {
 
     if (!accessToken) {
         await refresh();
-        if (!accessToken) return;
     }
 
     const res = await fetch(el.dataset.apiUrl + "api/carrot/timeline", {

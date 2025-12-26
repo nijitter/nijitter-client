@@ -6,29 +6,27 @@
     <title>Nijitter | タイムライン</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Rampart+One&family=Sawarabi+Gothic&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Sawarabi+Gothic&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/common.00003.css">
+    <link rel="stylesheet" href="/static/css/sidebar.00003.css">
 </head>
 
 <body data-api-url="{{ .apiUrl }}">
-    <style>
-        .dotgothic16-regular {
-            font-family: "DotGothic16", sans-serif;
-            font-weight: 400;
-            font-style: normal;
-        }
+    <div id="leftsidebar">
+        <div id="name"></div>
+        <div id="id"></div>
+        <img src="" alt="ユーザーアイコン">
+    </div>
+    <div id="centerbar">
+        <div id="post"><a href="/postcarrot">carrotはこちら</a></div>
+        <div id="timeline"></div>
+        <div id="loader">loading...</div>
+        <script type="module" src="/static/js/timeline.00013.js"></script>
+    </div>
+    <div id="rightsidebar">
 
-        .rampart-one-regular {
-            font-family: "Rampart One", sans-serif;
-            font-weight: 400;
-            font-style: normal;
-        }
-    </style>
-    <div id="post" class="dotgothic16-regular"><a href="/postcarrot">carrotはこちら</a></div>
-    <div id="timeline" class="rampart-one-regular"></div>
-    <div id="loader" class="dotgothic16-regular">loading...</div>
-    <script type="module" src="/static/js/timeline.00005.js"></script>
+    </div>
 </body>
 
 </html>

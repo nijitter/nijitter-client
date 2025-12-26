@@ -1,0 +1,41 @@
+/* 左 */
+#leftsidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 25%;
+    height: 100vh;
+    background-color: #222222;
+}
+
+/* 中央 */
+#centerbar {
+    position: relative;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+/* 右 */
+#rightsidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 25%;
+    height: 100vh;
+    background-color: #222222;
+}
+
+/* ===== スマホ対応 ===== */
+@media (max-width: 768px) {
+
+    #leftsidebar,
+    #rightsidebar {
+        display: none;
+    }
+
+    #centertimeline {
+        width: 100%;
+        margin: 0;
+    }
+}

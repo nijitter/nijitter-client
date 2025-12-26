@@ -36,8 +36,8 @@ func noCacheStaticFile(c *gin.Context) {
 	}
 
 	// staticDir の中にあるか検証
-	if absJoined != absStatic &&
-		!strings.HasPrefix(absJoined, absStatic+string(filepath.Separator)) {
+	rel, err := filepath.Rel(absStatic, absJoined)
+	if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
 		c.Status(http.StatusBadRequest)
 		return
 	}

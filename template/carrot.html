@@ -3,11 +3,113 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Nijitter | {{.carrotID}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nijitter - 投稿詳細</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Sawarabi+Gothic&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/common.css">
 </head>
 
-<body data-api-url="{{ .apiUrl }}" data-carrot-id="{{ .carrotID }}">
-    <script type="module" src="/static/js/carrot.00001.js"></script>
+<body data-api-url="{{ .apiUrl }}" data-image-url="{{ .image_url }}" data-carrot-id="{{ .carrotID }}">
+    <!-- Mobile View -->
+    <div class="mobile-view">
+        <header class="mobile-header">
+            <button id="backBtn" class="btn btn-small btn-text">← 戻る</button>
+        </header>
+
+        <main>
+            <div id="postDetail"></div>
+            <div style="border-top: 1px solid var(--color-gray-light); padding: 16px;">
+                <h3 style="margin-bottom: 16px;">返信</h3>
+                <div id="repliesList"></div>
+                <div id="loadMoreReplies" style="text-align: center; padding: 16px;">
+                    <button class="btn btn-secondary" id="loadMoreBtn">もっと表示</button>
+                </div>
+            </div>
+        </main>
+
+        <button class="btn btn-post" id="replyButton">✎</button>
+
+        <nav class="mobile-nav">
+            <button class="nav-icon" title="ホーム">🏠</button>
+        </nav>
+    </div>
+
+    <!-- Desktop View -->
+    <div class="desktop-view">
+        <div class="desktop-container">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="avatar avatar-small" id="desktopUserAvatar">👤</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-name" id="desktopUserName">ユーザー</div>
+                        <div class="sidebar-id" id="desktopUserId">@user</div>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <div class="sidebar-item">
+                        <div class="sidebar-icon">🏠</div>
+                        <span>ホーム</span>
+                    </div>
+                </nav>
+
+                <div class="logout-section">
+                    <button class="logout-btn" id="logoutBtn">ログアウト</button>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div style="padding: 16px; border-bottom: 1px solid var(--color-gray-light);">
+                    <button id="backBtn" class="btn btn-small btn-text">← 戻る</button>
+                </div>
+                <div id="postDetail"></div>
+                <div style="border-top: 1px solid var(--color-gray-light); padding: 16px;">
+                    <h3 style="margin-bottom: 16px;">返信</h3>
+                    <div id="repliesList"></div>
+                    <div id="loadMoreReplies" style="text-align: center; padding: 16px;">
+                        <button class="btn btn-secondary" id="loadMoreBtn">もっと表示</button>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="right-panel">
+                <button class="btn btn-primary" id="desktopReplyButton"
+                    style="width: 100%; margin-bottom: 20px; font-size: 18px; padding: 16px;">返信する</button>
+                <div class="sidebar-section">
+                    <h3 class="sidebar-section-title">投稿情報</h3>
+                    <p style="color: var(--color-gray-medium); text-align: center; padding: 24px;">
+                        この投稿への返信を表示中
+                    </p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Modal for reply -->
+    <div id="replyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>返信</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="replyForm" class="post-form">
+                    <textarea class="post-textarea" id="replyText" placeholder="返信を入力..." maxlength="280"></textarea>
+                    <div class="char-counter" id="replyCharCounter">0 / 280</div>
+                    <div id="replyError" class="error-message"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="modalCancel">キャンセル</button>
+                <button type="button" class="btn btn-primary" id="replySubmit">返信</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/static/js/carrot.js"></script>
 </body>
 
 </html>

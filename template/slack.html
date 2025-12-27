@@ -3,29 +3,66 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Nijitter | Slack認証</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アカウントを作成</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Sawarabi+Gothic&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/common.css?v=20251228-1">
+    <style>
+        .slack-container {
+            max-width: 600px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 600px) {
+            .signup-page .slack-button {
+                width: auto;
+                display: inline-block;
+            }
+        }
+    </style>
 </head>
 
 <body data-api-url="{{ .apiUrl }}">
-    <style>
-        #slack_button {
-            position: relative;
-            text-align: center;
-            top: 100px;
-        }
-        #got_account {
-            position: relative;
-            text-align: center;
-            top: 150px;
-        }
-    </style>
-    <div id="slack_button">
-        <a href="/state"><img alt="Add to Slack" height="40" width="139"
-                src="https://platform.slack-edge.com/img/add_to_slack.png"
-                srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
-    </div>
-    <div id="got_account">
-        <a href="/login">既にアカウントを持っている方はこちら</a>
+    <div class="signup-page">
+        <h1 class="signup-title">アカウントを作成</h1>
+
+        <div class="slack-container">
+            <div style="margin-bottom: 32px;">
+                <p style="font-size: 20px; margin-bottom: 16px;">SUNの方はこちら</p>
+                <a class="slack-button" href="/state?workspace=sun"><img alt="Add to Slack" height="40" width="139"
+                        src="https://platform.slack-edge.com/img/add_to_slack.png"
+                        srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+            </div>
+
+            <div style="margin-bottom: 32px;">
+                <p style="font-size: 20px; margin-bottom: 16px;">MOONの方はこちら</p>
+                <a class="slack-button" href="/state?workspace=moon"><img alt="Add to Slack" height="40" width="139"
+                        src="https://platform.slack-edge.com/img/add_to_slack.png"
+                        srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+            </div>
+
+            <div style="margin-bottom: 32px;">
+                <p style="font-size: 20px; margin-bottom: 16px;">GOLDの方はこちら</p>
+                <a class="slack-button" href="/state?workspace=gold"><img alt="Add to Slack" height="40" width="139"
+                        src="https://platform.slack-edge.com/img/add_to_slack.png"
+                        srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+            </div>
+
+            <div style="margin-bottom: 32px;">
+                <p style="font-size: 20px; margin-bottom: 16px;">mofafe鯖の方はこちら</p>
+                <a class="slack-button" href="/state?workspace=mofafe"><img alt="Add to Slack" height="40" width="139"
+                        src="https://platform.slack-edge.com/img/add_to_slack.png"
+                        srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+            </div>
+        </div>
+
+        <div class="signup-link">
+            <a href="/signup" class="link">新規登録はこちら</a>
+        </div>
     </div>
 </body>
 

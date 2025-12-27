@@ -3,31 +3,65 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Nijitter | carotting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nijitter | 投稿</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Sawarabi+Gothic&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/common.css">
 </head>
 
 <body data-api-url="{{ .apiUrl }}">
-    <style>
-        label {
-            text-align: left;
-        }
+    <!-- モーダルオーバーレイ -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>新しい投稿</h2>
+                <button class="modal-close" aria-label="閉じる">&times;</button>
+            </div>
 
-        #form {
-            position: relative;
-            top: 200px;
-            text-align: center;
-        }
-    </style>
-    <div id="form">
-        <p id="errorMsg" style="color: red;"></p>
-        <form id="carrotForm">
-            <label for="content">キャロット</label>
-            <br>
-            <input type="text" id="content" name="content" required>
-            <br>
-            <button type="submit">送信</button>
-        </form>
-        <script type="module" src="/static/js/postcarrot.00001.js"></script>
+            <div class="modal-body">
+                <p id="errorMsg" class="error-message"></p>
+
+                <form id="carrotForm" class="post-form">
+                    <div class="form-group">
+                        <textarea 
+                            id="content" 
+                            name="content" 
+                            class="post-textarea"
+                            placeholder="今何してる？"
+                            maxlength="280"
+                            required></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/280
+                        </div>
+                    </div>
+
+                    <div class="image-upload-section">
+                        <input type="file" 
+                               id="imageInput" 
+                               class="image-input" 
+                               accept="image/*" 
+                               multiple 
+                               style="display: none;">
+                        <button type="button" class="image-upload-btn" id="imageUploadBtn" title="画像を追加">
+                            🖼️
+                        </button>
+                    </div>
+
+                    <div id="imagePreview" class="image-preview"></div>
+
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-secondary">キャンセル</button>
+                        <button type="submit" class="btn btn-primary">投稿</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/static/js/postcarrot.main.js"></script>
 </body>
 
 </html>

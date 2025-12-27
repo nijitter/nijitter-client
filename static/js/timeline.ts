@@ -1,77 +1,151 @@
-let accessToken: string | null = null;
-let refreshPromise: Promise<void> | null = null;
+/**
+ * Timeline Manager
+ * タイムラインの表示と管理を行うモジュール
+ */
 
-async function refresh() {
-    if (refreshPromise) return refreshPromise;
+import api, { type TimelineCarrot, type TimelineResponse } from './api.js';
 
-    const el = document.body;
+export interface TimelineState {
+  carrots: TimelineCarrot[];
+  nextCursor: number | null;
+  isLoading: boolean;
+  hasMore: boolean;
+}
 
-    refreshPromise = (async () => {
-        const res = await fetch(el.dataset.apiUrl + "api/auth/refresh", {
-            method: "POST",
-            credentials: "include",
-        });
+export class TimelineManager {
+  private state: TimelineState = {
+    carrots: [],
+    nextCursor: null,
+    isLoading: false,
+    hasMore: true,
+  };
 
-        if (res.status === 401) {
-            window.location.href = "/login";
-            throw new Error("refresh failed");
-        }
+  private listeners: Set<(state: TimelineState) => void> = new Set();
+  private timelineType: 'latest' | 'following' = 'latest';
 
-        const data = await res.json();
-        if (!data.access_token) {
-            throw new Error("no access token");
-        }
+  constructor(timelineType: 'latest' | 'following' = 'latest') {
+    this.timelineType = timelineType;
+  }
 
-        accessToken = data.access_token;
-    })();
+  /**
+   * 状態の変更をリッスン
+   */
+  subscribe(listener: (state: TimelineState) => void): () => void {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  /**
+   * 全リスナーに状態を通知
+   */
+  private notifyListeners(): void {
+    const state = this.getState();
+    this.listeners.forEach((listener) => listener(state));
+  }
+
+  /**
+   * 現在の状態を取得
+   */
+  getState(): TimelineState {
+    return { ...this.state };
+  }
+
+  /**
+   * タイムラインを読み込む
+   */
+  async loadTimeline(): Promise<void> {
+    if (this.state.isLoading) return;
+
+    this.state.isLoading = true;
+    this.notifyListeners();
 
     try {
-        await refreshPromise;
+      let response: TimelineResponse;
+      if (this.timelineType === 'latest') {
+        response = await api.getTimeline();
+      } else {
+        response = await api.getFollowingTimeline();
+      }
+
+      this.state.carrots = response.carrots;
+      this.state.nextCursor = response.next_cursor;
+      this.state.hasMore = response.next_cursor !== null;
+    } catch (error) {
+      console.error('Failed to load timeline:', error);
+      throw error;
     } finally {
-        refreshPromise = null;
+      this.state.isLoading = false;
+      this.notifyListeners();
     }
+  }
+
+  /**
+   * さらにタイムラインを読み込む（無限スクロール）
+   */
+  async loadMore(): Promise<void> {
+    if (this.state.isLoading || !this.state.hasMore || !this.state.nextCursor) {
+      return;
+    }
+
+    this.state.isLoading = true;
+    this.notifyListeners();
+
+    try {
+      let response: TimelineResponse;
+      if (this.timelineType === 'latest') {
+        response = await api.getTimeline(this.state.nextCursor);
+      } else {
+        response = await api.getFollowingTimeline(this.state.nextCursor);
+      }
+
+      this.state.carrots.push(...response.carrots);
+      this.state.nextCursor = response.next_cursor;
+      this.state.hasMore = response.next_cursor !== null;
+    } catch (error) {
+      console.error('Failed to load more:', error);
+      throw error;
+    } finally {
+      this.state.isLoading = false;
+      this.notifyListeners();
+    }
+  }
+
+  /**
+   * 投稿を追加
+   */
+  addCarrot(carrot: TimelineCarrot): void {
+    this.state.carrots.unshift(carrot);
+    this.notifyListeners();
+  }
+
+  /**
+   * 投稿を削除
+   */
+  removeCarrot(carrotId: number): void {
+    this.state.carrots = this.state.carrots.filter((c) => c.id !== carrotId);
+    this.notifyListeners();
+  }
+
+  /**
+   * 投稿を更新
+   */
+  updateCarrot(carrotId: number, updates: Partial<TimelineCarrot>): void {
+    const carrot = this.state.carrots.find((c) => c.id === carrotId);
+    if (carrot) {
+      Object.assign(carrot, updates);
+      this.notifyListeners();
+    }
+  }
+
+  /**
+   * タイムラインタイプを変更
+   */
+  setTimelineType(type: 'latest' | 'following'): void {
+    this.timelineType = type;
+    this.state.carrots = [];
+    this.state.nextCursor = null;
+    this.state.hasMore = true;
+  }
 }
 
-async function timelineFetch() {
-    const el = document.body;
-
-    if (!accessToken) {
-        await refresh();
-    }
-
-    const res = await fetch(el.dataset.apiUrl + "api/carrot/timeline", {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-        method: "GET",
-        credentials: "include",
-    });
-
-    if (res.status === 401) {
-        window.location.href = "/login";
-        return;
-    }
-
-    const data = await res.json();
-
-    if (data.carrots.length === 0) {
-        const loader = document.getElementById("loader");
-        if (!loader) throw new Error("loader not found");
-        loader.textContent = "end";
-        return data;
-    }
-
-    const timeline = document.getElementById("timeline");
-    if (!timeline) throw new Error("timeline not found");
-
-    for (const post of data.carrots) {
-        const div = document.createElement("div");
-        div.className = "carrot";
-        div.textContent = post.content + " by: " + post.username;
-        timeline.appendChild(div);
-    }
-
-    return data;
-}
-
-timelineFetch();
+export default TimelineManager;

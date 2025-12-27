@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nijitter - アカウント作成</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/common.css">
+    </head>
+    <body data-api-url="{{ .apiUrl }}">
+        <div class="signup-container">
+            <div class="auth-card">
+                <h1 class="auth-title">アカウント作成</h1>
+                <p style="text-align: center; color: var(--color-gray-medium); margin-bottom: var(--spacing-xl);">メールアドレスを入力してください</p>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Nijitter | サインアップ</title>
-</head>
+                <form class="auth-form" id="signupForm">
+                    <div id="errorMessage" class="error-message"></div>
+                    <div class="form-group">
+                        <input type="email" class="input-field" id="email" placeholder="メールアドレス" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">確認メールを送信</button>
+                </form>
 
-<body data-api-url="{{ .apiUrl }}">
-    <style>
-        #form {
-            position: relative;
-            top: 200px;
-            text-align: center;
-        }
-    </style>
-    <div id="form">
-        <p id="errorMsg" style="color: red;"></p>
-        <form id="emailForm">
-            <label for="email">メールアドレス</label>
-            <input type="email" id="email" name="email" required>
-            <br>
-            <button type="submit">送信</button>
-        </form>
-    </div>
-    <script type="module" src="/static/js/signup.00001.js"></script>
-</body>
+                <div class="auth-link">
+                    既にアカウントをお持ちですか？ <a href="/login">ログイン</a>
+                </div>
+            </div>
+        </div>
 
+        <script type="module" src="/static/js/signup.main.js"></script>
+    </body>
 </html>

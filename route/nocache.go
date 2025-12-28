@@ -35,8 +35,14 @@ func noCacheStaticFile(c *gin.Context) {
 		return
 	}
 
-	if absJoined != absStatic &&
-		!strings.HasPrefix(absJoined, absStatic+string(filepath.Separator)) {
+	// ユーザー入力を使ってパスを構築し、正規化
+	joined := filepath.Join(absStatic, reqPath)
+	absJoined := filepath.Clean(joined)
+
+	// セキュリティチェック：結果パスがベースディレクトリ内であることを確認
+	// 1. 正確にベースディレクトリと一致するか
+	// 2. またはベースディレクトリ + セパレータで始まるか
+	if absJoined != absStatic && !strings.HasPrefix(absJoined, absStatic+string(filepath.Separator)) {
 		c.Status(http.StatusBadRequest)
 		return
 	}

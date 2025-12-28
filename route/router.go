@@ -12,7 +12,7 @@ func Router() {
 	route := gin.Default()
 	route.LoadHTMLGlob("template/*")
 
-	route.GET("/static/*filepath", staticHandler)
+	route.GET("/static/*filepath", noCacheStaticFile)
 
 	route.GET("/slack", web.SlackHandle)
 	route.GET("/signup", web.SignupHandle)

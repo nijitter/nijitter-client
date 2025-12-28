@@ -3,40 +3,66 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Nijitter | 確認とアカウント作成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nijitter - メール認証</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/common.css">
 </head>
 
 <body data-api-url="{{ .apiUrl }}">
-    <style>
-        label {
-            text-align: left;
-        }
+    <div class="signup-container">
+        <div class="auth-card">
+            <h1 class="auth-title">メール認証</h1>
+            <p style="text-align: center; color: var(--color-gray-medium); margin-bottom: var(--spacing-xl);" id="emailDisplay">メールアドレスを確認中...</p>
 
-        #form {
-            position: relative;
-            top: 200px;
-            text-align: center;
-        }
-    </style>
-    <div id="form">
-        <p id="errorMsg" style="color: red;"></p>
-        <form id="signupForm">
-            <label for="password">パスワード</label>
-            <br>
-            <input type="password" id="password" name="password" required>
-            <br>
-            <label for="user_id">ユーザーID</label>
-            <br>
-            <input type="text" id="user_id" name="user_id" required>
-            <br>
-            <label for="username">ユーザーネーム</label>
-            <br>
-            <input type="text" id="username" name="username" required>
-            <br>
-            <button type="submit">送信</button>
-        </form>
-        <script type="module" src="/static/js/verify.js"></script>
+            <form class="auth-form" id="verifyForm">
+                <div id="errorMessage" class="error-message"></div>
+
+                <div class="form-group">
+                    <label class="form-label">メールのリンクをクリック</label>
+                    <p style="color: var(--color-gray-medium); font-size: var(--font-size-sm); margin-top: var(--spacing-sm);">
+                        メールに送信されたリンクをクリックするか、以下にトークンを入力してください
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">確認トークン</label>
+                    <input type="text" class="input-field" id="verifyToken" placeholder="メール内のトークン" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">ユーザーID</label>
+                    <input type="text" class="input-field" id="userId" placeholder="ユーザーID（英数字）" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">ユーザー名</label>
+                    <input type="text" class="input-field" id="username" placeholder="ユーザー名（表示名）" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">パスワード</label>
+                        <input type="password" class="input-field" id="password" placeholder="パスワード（8文字以上）" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">パスワード確認</label>
+                        <input type="password" class="input-field" id="confirmPassword" placeholder="パスワード確認" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">アカウント作成</button>
+            </form>
+
+            <div class="auth-link">
+                <a href="/signup">メールアドレスを変更</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/static/js/verify.main.js"></script>
 </body>
 
 </html>

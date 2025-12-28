@@ -11,14 +11,8 @@ func Router() {
 
 	route := gin.Default()
 	route.LoadHTMLGlob("template/*")
-	// JS をキャッシュさせない
-	route.GET("/static/*.js", noCacheStaticFile)
 
-	// CSS をキャッシュさせない
-	route.GET("/static/*.css", noCacheStaticFile)
-
-	// 画像・フォントなどは通常配信
-	route.Static("/static", "./static")
+	route.GET("/static/*filepath", staticHandler)
 
 	route.GET("/slack", web.SlackHandle)
 	route.GET("/signup", web.SignupHandle)

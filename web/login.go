@@ -42,7 +42,7 @@ func ErrorHandle(c *gin.Context) {
 
 // Slack認証のクエリにstateを付与
 func StateHandle(c *gin.Context) {
-	resp, err := http.Get(os.Getenv("API_URL") + "/api/auth/state")
+	resp, err := http.Get(os.Getenv("API_URL") + "/auth/state")
 	if err != nil {
 		c.JSON(500, gin.H{"error": "api error"})
 		return

@@ -1,0 +1,13 @@
+{
+  "name": "nijitter-client",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:ts": "tsc --outDir static/js",
+    "watch:ts": "tsc --watch --outDir static/js",
+    "clean": "powershell -Command \"Remove-Item static/js/*.js -ErrorAction SilentlyContinue\""
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

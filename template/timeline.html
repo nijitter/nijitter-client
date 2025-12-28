@@ -2,31 +2,154 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Nijitter | タイムライン</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Sawarabi+Gothic&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/common.css">
-    <link rel="stylesheet" href="/static/css/sidebar.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nijitter - ホーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/common.css">
 </head>
 
-<body data-api-url="{{ .apiUrl }}">
-    <div id="leftsidebar">
-        <div id="name"></div>
-        <div id="id"></div>
-        <img src="" alt="ユーザーアイコン">
-    </div>
-    <div id="centerbar">
-        <div id="post"><a href="/postcarrot">carrotはこちら</a></div>
-        <div id="timeline"></div>
-        <div id="loader">loading...</div>
-        <script type="module" src="/static/js/timeline.js"></script>
-    </div>
-    <div id="rightsidebar">
+<body data-api-url="{{ .apiUrl }}" data-image-url="{{ .image_url }}">
+  <!-- Mobile View -->
+  <div class="mobile-view">
+    <header class="mobile-header">
+      <div class="mobile-user-section">
+        <div class="avatar avatar-small" id="mobileUserAvatar">👤</div>
+      </div>
+      <div class="mobile-tabs">
+        <button class="tab active" data-timeline="latest">最新</button>
+        <button class="tab" data-timeline="following">フォロー中</button>
+      </div>
+    </header>
 
+    <main id="mobilePostList"></main>
+
+    <button class="btn btn-post" id="postButton">✎</button>
+
+    <nav class="mobile-nav">
+      <button class="nav-icon active" id="mobileHomeBtn" title="ホーム">🏠</button>
+      <button class="nav-icon" id="mobileSearchBtn" title="検索">🔍</button>
+      <button class="nav-icon" id="mobileNotificationBtn" title="通知">
+        🔔
+        <span class="notification-badge" id="mobileNotificationBadge" style="display: none;">0</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Desktop View -->
+  <div class="desktop-view">
+    <div class="desktop-container">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="avatar avatar-small" id="desktopUserAvatar">👤</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-name" id="desktopUserName">ユーザー</div>
+            <div class="sidebar-id" id="desktopUserId">@user</div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <div class="sidebar-item active" id="desktopHomeBtn">
+            <div class="sidebar-icon">🏠</div>
+            <span>ホーム</span>
+          </div>
+          <div class="sidebar-item" id="desktopNotificationBtn">
+            <div class="sidebar-icon">🔔</div>
+            <span>通知</span>
+            <span class="notification-badge" id="desktopNotificationBadge" style="display: none;">0</span>
+          </div>
+        </nav>
+
+        <div class="logout-section">
+          <button class="logout-btn" id="logoutBtn">ログアウト</button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <div style="padding: 16px; border-bottom: 1px solid var(--color-gray-light);">
+          <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+            <button class="tab active" data-timeline="latest">最新</button>
+            <button class="tab" data-timeline="following">フォロー中</button>
+          </div>
+        </div>
+        <div id="desktopPostList"></div>
+      </main>
+
+      <aside class="right-panel">
+        <button class="btn btn-primary" id="desktopPostButton"
+          style="width: 100%; margin-bottom: 20px; font-size: 18px; padding: 16px;">投稿する</button>
+        <div class="search-box">
+          <div class="search-icon">🔍</div>
+          <input type="text" class="search-input" id="searchInput" placeholder="ユーザーや投稿を検索">
+        </div>
+        <div id="searchResults" class="sidebar-section" style="display: none;">
+          <h3 class="sidebar-section-title">検索結果</h3>
+          <div id="searchResultsContent"></div>
+        </div>
+        <div class="sidebar-section" id="trendSection">
+          <h3 class="sidebar-section-title">トレンド</h3>
+          <p style="color: var(--color-gray-medium); text-align: center; padding: 24px;">
+            まだトレンド情報はありません
+          </p>
+        </div>
+      </aside>
     </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div id="notificationPanel" class="notification-panel" style="display: none;">
+    <div class="notification-header">
+      <h2>通知</h2>
+      <button class="notification-close" id="notificationClose">×</button>
+    </div>
+    <div class="notification-content" id="notificationContent">
+      <div class="loader">読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- Search Panel (Mobile) -->
+  <div id="searchPanel" class="search-panel" style="display: none;">
+    <div class="search-panel-header">
+      <button class="back-btn" id="searchBackBtn">←</button>
+      <input type="text" class="search-panel-input" id="mobileSearchInput" placeholder="ユーザーや投稿を検索">
+    </div>
+    <div class="search-panel-content" id="mobileSearchResults">
+      <p style="color: var(--color-gray-medium); text-align: center; padding: 24px;">キーワードを入力して検索</p>
+    </div>
+  </div>
+
+  <!-- Modal for post creation -->
+  <div id="postModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>新しい投稿</h2>
+        <button class="modal-close" id="modalClose">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="postForm" class="post-form">
+          <textarea class="post-textarea" id="postText" placeholder="何が起きてますか？" maxlength="280"></textarea>
+          <div class="char-counter" id="charCounter">0 / 280</div>
+
+          <div class="image-preview" id="imagePreview"></div>
+
+          <div class="image-upload-section">
+            <button type="button" class="image-upload-btn" id="imageUploadBtn">🖼️</button>
+            <input type="file" id="imageInput" class="image-input" accept="image/*" multiple>
+          </div>
+
+          <div id="formError" class="error-message"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="modalCancel">キャンセル</button>
+        <button type="button" class="btn btn-primary" id="postSubmit">投稿</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/static/js/timeline.main.js?v=20251227-1"></script>
 </body>
 
 </html>

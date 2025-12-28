@@ -30,7 +30,8 @@ type ResponseUserData struct {
 
 func TimelineHandle(c *gin.Context) {
 	c.HTML(http.StatusOK, "timeline.html", gin.H{
-		"apiUrl": os.Getenv("API_URL"),
+		"apiUrl":   os.Getenv("API_URL"),
+		"image_url": os.Getenv("IMAGE_URL"),
 	})
 }
 
@@ -47,6 +48,7 @@ func CarrotHandle(c *gin.Context) {
 	c.HTML(http.StatusOK, "carrot.html", gin.H{
 		"carrotID": c.Param("id"),
 		"apiUrl":   os.Getenv("API_URL"),
+		"image_url": os.Getenv("IMAGE_URL"),
 	})
 }
 

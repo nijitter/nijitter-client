@@ -28,8 +28,8 @@ func noCacheStaticFile(c *gin.Context) {
 	absStatic = filepath.Clean(absStatic)
 
 	// ユーザー入力を使ってパスを構築し、正規化
-	joined := filepath.Join(absStatic, reqPath)
-	absJoined := filepath.Clean(joined)
+	joined = filepath.Join(absStatic, reqPath)
+	absJoined = filepath.Clean(joined)
 
 	// セキュリティチェック：結果パスがベースディレクトリ内であることを確認
 	// 1. 正確にベースディレクトリと一致するか

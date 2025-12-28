@@ -24,23 +24,22 @@ func staticHandler(c *gin.Context) {
 		c.Header("Cache-Control", "public, max-age=86400")
 	}
 
-	// --- パストラバーサル対策 ---
-	joined := filepath.Join(staticDir, reqPath)
-
-	absJoined, err := filepath.Abs(joined)
-	if err != nil {
-		c.Status(http.StatusBadRequest)
-		return
-	}
-
+	// --- パストトラバーサル対策 ---
+	// ベースディレクトリを絶対パスに正規化
 	absStatic, err := filepath.Abs(staticDir)
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	if absJoined != absStatic &&
-		!strings.HasPrefix(absJoined, absStatic+string(filepath.Separator)) {
+	// ユーザー入力を使ってパスを構築し、正規化
+	joined := filepath.Join(absStatic, reqPath)
+	absJoined := filepath.Clean(joined)
+
+	// セキュリティチェック：結果パスがベースディレクトリ内であることを確認
+	// 1. 正確にベースディレクトリと一致するか
+	// 2. またはベースディレクトリ + セパレータで始まるか
+	if absJoined != absStatic && !strings.HasPrefix(absJoined, absStatic+string(filepath.Separator)) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
